@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width initial-scale=1 maximum-scale=1 user-scalable=0"
+    />
+    <title>PoC - Rubens three.js and three-gpu-pathtracer Configuration Renderer</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2" />
+    <style>
+      body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        background-color: #111;
+      }
+      #menu-area {
+        position: absolute;
+        bottom: 20px;
+        left: 10px;
+      }
+      #status-line-1 {
+        left: 10px;
+        font-family: sans-serif;
+      }
+      #status-line-1 {
+        left: 10px;
+        font-family: sans-serif;
+      }
+      .label {
+        color: #000000;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+        padding: 2px;
+        background: rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="menu-area">
+      <div id="status-line-2"></div>
+      <div id="status-line-1"></div>
+    </div>
+    <div id="container">
+      <canvas id="three_canvas"> </canvas>
+    </div>
+    <script type="module" src="792.bundle.js"></script>
+  </body>
+</html>
