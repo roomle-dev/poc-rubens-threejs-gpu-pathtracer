@@ -19,10 +19,10 @@
   "devDependencies": {
     "@types/dat.gui": "^0.7.13",
     "@types/express": "^4.17.21",
-    "@types/node": "^20.12.10",
-    "@types/three": "^0.164.0",
-    "@typescript-eslint/eslint-plugin": "^7.8.0",
-    "@typescript-eslint/parser": "^7.8.0",
+    "@types/node": "^20.12.12",
+    "@types/three": "^0.164.1",
+    "@typescript-eslint/eslint-plugin": "^7.11.0",
+    "@typescript-eslint/parser": "^7.11.0",
     "copy-webpack-plugin": "^12.0.2",
     "copyfiles": "^2.4.1",
     "dat.gui": "^0.7.9",
@@ -43,10 +43,10 @@
     "webpack-merge": "^5.10.0"
   },
   "dependencies": {
-    "axios": "^1.6.8",
+    "axios": "^1.7.2",
     "express": "^4.19.2",
-    "roomle-core-hsc": "https://www.roomle.com/t/external/core/2.27.0/hsc.tar.gz",
-    "three": "^0.163.0",
+    "roomle-core-hsc": "https://www.roomle.com/t/external/core/alpha/2.29.0-alpha.6/hsc.tar.gz",
+    "three": "^0.164.1",
     "three-mesh-bvh": "^0.7.4",
     "three-gpu-pathtracer": "0.0.22"
   },
