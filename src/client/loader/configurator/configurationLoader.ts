@@ -38,7 +38,16 @@ export class ConfigurationLoader extends Loader {
     configurationId: string
   ): Promise<LoadedConfiguration> {
     const configuratorMesh: MeshConstructor =
-      await MeshConstructor.newMeshConstructor();
+      await MeshConstructor.newMeshConstructor(
+        {},
+        {
+          locateFile(path, prefix) {
+            const filePath = (path.endsWith('.wasm') ? './' : prefix) + path;
+            console.log('loading file: ' + filePath);
+            return filePath;
+          },
+        }
+      );
     const meshConstructionData =
       await configuratorMesh.constructMesh(configurationId);
     const configurationData = new ThreeMeshConstructor(
@@ -101,7 +110,8 @@ export class ThreeMeshConstructor {
     const materialData: MaterialData[] = [];
     const materials = meshConstructionData.materialProperties.map((item) => {
       const material = this.createThreeMaterial(
-        item.specification.id as string,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        item.specification.id,
         item.properties
       );
       material.userData = {
@@ -209,7 +219,7 @@ export class ThreeMeshConstructor {
 
   private updateMaterialProperties(
     material: Material,
-    materialAttributes?: Record<string, string>
+    materialAttributes: Record<string, string> | null
   ) {
     if (
       materialAttributes &&
@@ -370,7 +380,8 @@ export class ThreeMeshConstructor {
     let globalTransform = new Matrix4();
     if (planComponentData) {
       const floatBuffer = new Float32Array(
-        planComponentData.planComponent.globalTransform.m as number[]
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        planComponentData.planComponent.globalTransform.m
       );
       globalTransform = convertToThreeMatrix(floatBuffer);
     }
