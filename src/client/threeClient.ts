@@ -20,8 +20,7 @@ import Stats from 'three/examples/jsm/libs/stats.module';
 //import { GUI } from 'dat.gui';
 // @ts-ignore
 import { ParallelMeshBVHWorker } from 'three-mesh-bvh/src/workers/ParallelMeshBVHWorker.js';
-// @ts-ignore
-import { WebGLPathTracer } from 'three-gpu-pathtracer/src/core/WebGLPathTracer.js';
+import { WebGLPathTracer } from 'three-gpu-pathtracer/src';
 
 const ENV_URL =
   'https://raw.githubusercontent.com/gkjohnson/3d-demo-data/master/hdri/chinese_garden_1k.hdr';
@@ -55,17 +54,14 @@ export const configurationRenderer = (
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const { tiles, renderScale } = getScaledSettings();
   console.log('tiles', tiles);
   console.log('renderScale', renderScale);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const pathTracer = new WebGLPathTracer(renderer);
   pathTracer.filterGlossyFactor = 0.5;
   pathTracer.renderScale = renderScale;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   pathTracer.tiles.set(tiles, tiles);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
   pathTracer.setBVHWorker(new ParallelMeshBVHWorker());
 
   const camera = new PerspectiveCamera(
@@ -78,7 +74,6 @@ export const configurationRenderer = (
   camera.updateMatrixWorld();
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.target.set(0, 0.5, 0);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   controls.addEventListener('change', () => pathTracer.updateCamera());
   controls.update();
 
@@ -132,7 +127,6 @@ export const configurationRenderer = (
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       pathTracer.updateCamera();
     },
     false
@@ -163,10 +157,8 @@ export const configurationRenderer = (
 
   const render = () => {
     //renderer.render(scene, camera);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     pathTracer.renderSample();
     setStatus(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       `samples ${Math.floor(pathTracer.samples)}`,
       '#000000',
       'status-line-2'
@@ -183,7 +175,6 @@ export const configurationRenderer = (
     if (parameterId) {
       await loadHdr(ENV_URL);
       await loadConfiguratorMesh(parameterId);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       await pathTracer.setSceneAsync(scene, camera, {
         onProgress: (v: any) =>
           setStatus(
