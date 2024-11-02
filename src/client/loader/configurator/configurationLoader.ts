@@ -110,7 +110,6 @@ export class ThreeMeshConstructor {
     const materialData: MaterialData[] = [];
     const materials = meshConstructionData.materialProperties.map((item) => {
       const material = this.createThreeMaterial(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         item.specification.id,
         item.properties
       );
@@ -380,7 +379,6 @@ export class ThreeMeshConstructor {
     let globalTransform = new Matrix4();
     if (planComponentData) {
       const floatBuffer = new Float32Array(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         planComponentData.planComponent.globalTransform.m
       );
       globalTransform = convertToThreeMatrix(floatBuffer);

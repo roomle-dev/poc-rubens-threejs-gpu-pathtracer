@@ -87,7 +87,7 @@ const _setMaterialV1Properties = (
 
 // To fulfill the "eslint" complexity rule, we would have to split this function into at least 3 functions.
 // This is pointless, as this function does exactly one thing, namely map "RapiMaterial" to "MeshPhysicalMaterial".
-// eslint-disable-next-line complexity
+
 const _setMaterialV2Properties = (
   meshPhysicalMaterial: MeshPhysicalMaterial,
   rapiMaterial: MaterialProperties

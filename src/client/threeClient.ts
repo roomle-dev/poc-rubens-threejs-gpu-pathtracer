@@ -61,7 +61,7 @@ export const configurationRenderer = (
   pathTracer.filterGlossyFactor = 0.5;
   pathTracer.renderScale = renderScale;
   pathTracer.tiles.set(tiles, tiles);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
+
   pathTracer.setBVHWorker(new ParallelMeshBVHWorker());
 
   const camera = new PerspectiveCamera(
@@ -111,9 +111,9 @@ export const configurationRenderer = (
     controls.enabled = !event.value;
   });
   meshTransformControl.attach(meshGroup);
-  meshTransformControl.visible = false;
+  meshTransformControl.getHelper().visible = false;
   meshTransformControl.enabled = false;
-  scene.add(meshTransformControl);
+  scene.add(meshTransformControl.getHelper());
 
   const stats = new Stats();
   document.body.appendChild(stats.dom);
@@ -206,7 +206,11 @@ const setStatus = (
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const parameterId = urlParams.get('id') as string | undefined;
+let parameterId = urlParams.get('id') as string | undefined;
+if (!parameterId) {
+  parameterId =
+    'usm:frame:9C4BC73D19BAAD07675CDDEA721F493BB126939392FF80318204B089BD55C71A';
+}
 if (parameterId) {
   console.log(`id: ${parameterId}`);
 }
