@@ -1,5 +1,4 @@
-import { ConfigurationLoader } from './loader/configurator/configurationLoader';
-import type { Object3D } from 'three';
+import { SceneCache } from './roomle-threejs-loader/src/scene/scene-cache';
 import {
   ACESFilmicToneMapping,
   BoxGeometry,
@@ -15,7 +14,9 @@ import {
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
+import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import Stats from 'three/examples/jsm/libs/stats.module';
 //import { GUI } from 'dat.gui';
 // @ts-ignore
@@ -23,6 +24,7 @@ import { ParallelMeshBVHWorker } from 'three-mesh-bvh/src/workers/ParallelMeshBV
 import { WebGLPathTracer } from 'three-gpu-pathtracer/src';
 
 const ENV_URL =
+  //'https://raw.githubusercontent.com/roomle/Roomle_Assets/refs/heads/main/Bathroom_Ring_Tunnel.exr';
   'https://raw.githubusercontent.com/gkjohnson/3d-demo-data/master/hdri/chinese_garden_1k.hdr';
 
 const getScaledSettings = () => {
@@ -54,6 +56,11 @@ export const configurationRenderer = (
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
 
+  const dracoLoader = new DRACOLoader();
+  dracoLoader.setDecoderPath('./draco/');
+  dracoLoader.setDecoderConfig({ type: 'js' });
+  const sceneCache = new SceneCache(dracoLoader);
+
   const { tiles, renderScale } = getScaledSettings();
   console.log('tiles', tiles);
   console.log('renderScale', renderScale);
@@ -77,6 +84,7 @@ export const configurationRenderer = (
   controls.addEventListener('change', () => pathTracer.updateCamera());
   controls.update();
 
+  const exrLoader = new EXRLoader();
   const rgbeLoader = new RGBELoader();
   const scene = new Scene();
   scene.background = new Color(0xffffff);
@@ -132,20 +140,23 @@ export const configurationRenderer = (
     false
   );
 
-  const sceneCache: Map<string, Object3D> = new Map();
-  const loadConfiguratorMesh = async (configurationId: string) => {
-    let loadedScene = sceneCache.get(configurationId);
+  const loadScene = async (idOrUrl: string) => {
+    let loadedScene = sceneCache.getScene(idOrUrl);
     if (!loadedScene) {
-      setStatus(`load ${configurationId}`, '#ff0000');
-      const configurationLoader = new ConfigurationLoader();
-      loadedScene = (await configurationLoader.loadAsync(configurationId))
-        .scene;
-      sceneCache.set(configurationId, loadedScene);
+      setStatus(`load ${idOrUrl}`, '#ff0000');
+      loadedScene = await sceneCache.loadSceneFromId(idOrUrl);
     }
-    setStatus(`render ${configurationId}`, '#ff0000');
+    setStatus(`render ${idOrUrl}`, '#ff0000');
     meshGroup.clear();
-    meshGroup.add(loadedScene);
-    setStatus(`${configurationId}`);
+    meshGroup.add(loadedScene.sceneObject);
+    setStatus(`${idOrUrl}`);
+  };
+
+  const loadExr = async (resource: string) => {
+    const equirectTexture = await exrLoader.loadAsync(resource);
+    equirectTexture.mapping = EquirectangularReflectionMapping;
+    scene.background = equirectTexture;
+    scene.environment = equirectTexture;
   };
 
   const loadHdr = async (resource: string) => {
@@ -173,8 +184,14 @@ export const configurationRenderer = (
 
   const startRendering = async () => {
     if (parameterId) {
-      await loadHdr(ENV_URL);
-      await loadConfiguratorMesh(parameterId);
+      const environmentUrl = envUrl ?? ENV_URL;
+      const environmentToLower = environmentUrl.toLowerCase();
+      if (environmentToLower.endsWith('.hdr')) {
+        await loadHdr(environmentUrl);
+      } else if (environmentToLower.endsWith('.exr')) {
+        await loadExr(environmentUrl);
+      }
+      await loadScene(parameterId);
       await pathTracer.setSceneAsync(scene, camera, {
         onProgress: (v: any) =>
           setStatus(
@@ -213,6 +230,10 @@ if (!parameterId) {
 }
 if (parameterId) {
   console.log(`id: ${parameterId}`);
+}
+let envUrl = urlParams.get('envUrl') as string | undefined;
+if (envUrl) {
+  console.log(`envUrl: ${envUrl}`);
 }
 
 const threeCanvas = document.getElementById('three_canvas');

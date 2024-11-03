@@ -8,6 +8,7 @@
     "install:webpack": "npm install --save-dev webpack",
     "format": "prettier . --write --ignore-path .prettierignore && npx eslint ./src/** --fix",
     "update:modules": "ncu -u && npm update && npm i",
+    "update:submodule": "git submodule update --remote --merge src/client/roomle-threejs-loader",
     "build:client": "webpack --config ./src/client/webpack.prod.js",
     "build:server": "tsc -p ./src/server",
     "build": "npm run build:client && npm run build:server",
@@ -45,7 +46,7 @@
   "dependencies": {
     "axios": "^1.7.7",
     "express": "^4.21.1",
-    "roomle-core-hsc": "https://www.roomle.com/t/external/core/alpha/2.31.0-alpha.10/hsc.tar.gz",
+    "roomle-core-hsc": "https://www.roomle.com/t/external/core/alpha/2.39.0-alpha.11/hsc.tar.gz",
     "three": "^0.170.0",
     "three-mesh-bvh": "^0.8.2",
     "three-gpu-pathtracer": "0.0.23"

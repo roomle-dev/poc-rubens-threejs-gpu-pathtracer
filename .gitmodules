@@ -1,0 +1,4 @@
+[submodule "src/client/roomle-threejs-loader"]
+	path = src/client/roomle-threejs-loader
+	url = https://github.com/roomle-dev/roomle-threejs-loader.git
+	branch = release

@@ -46,6 +46,10 @@ module.exports = {
                     from: path.resolve('./node_modules/roomle-core-hsc/wasm_modern/ConfiguratorKernel.wasm'),
                     to: '.',
                 },
+                {
+                    from: path.resolve('./node_modules/roomle-core-hsc/wasm_modern/RoomleCore.wasm'),
+                    to: '.',
+                },
             ]
         }),
         new CopyWebpackPlugin({
