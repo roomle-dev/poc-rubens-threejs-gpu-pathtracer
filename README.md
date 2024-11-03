@@ -2,8 +2,7 @@
 
 PoC wich uses [three-gpu-pathtracer](https://github.com/gkjohnson/three-gpu-pathtracer) to render Rubens configurations.
 
-
-A configuration can be loaded by passing the id as a query parameter to the url: `?id=<configurationId>`
+A configuration or plan can be loaded by passing the id as a query parameter to the url: `?id=<configurationId>`
 
 e.g.:
 
